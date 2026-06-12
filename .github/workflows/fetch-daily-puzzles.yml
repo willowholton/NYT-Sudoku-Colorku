@@ -1,5 +1,8 @@
 name: fetch-daily-puzzles
 
+permissions:
+  contents: write
+
 on:
   schedule:
     - cron: '0 2 * * *'
@@ -24,3 +27,11 @@ jobs:
 
       - name: Run Python script
         run: python3 sudoku.py
+
+      - name: Commit puzzle images
+        run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+    	git add puzzles/
+    	git commit -m "Added puzzles for $(date +'%Y-%m-%d')"
+        git push
