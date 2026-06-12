@@ -30,8 +30,8 @@ for i in range(3):
     fig, ax = pyplot.subplots(figsize=(11,11))
     ax.set_aspect("equal")
     ax.set_axis_off()
-    ax.set_xlim(-0.25, 10.25)
-    ax.set_ylim(-0.25, 10.25)
+    ax.set_xlim(0, 9)
+    ax.set_ylim(0, 9)
 
     for i in range(10):
         if (i % 3 == 0):
@@ -48,4 +48,4 @@ for i in range(3):
                 circle = pyplot.Circle(xy=(j+0.5, 9-i-1+0.5), radius=0.25, color=colors[value], fill=True)
                 ax.add_patch(circle)
 
-    pyplot.savefig(file_path)
+    pyplot.savefig(file_path, bbox_inches='tight', pad_inches=0.25)
