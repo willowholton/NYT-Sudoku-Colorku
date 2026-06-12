@@ -1,7 +1,6 @@
 import requests
 import re
 import matplotlib.pyplot as pyplot
-from enum import Enum
 
 
 url = "https://www.nytimes.com/puzzles/sudoku/"
@@ -12,8 +11,6 @@ gamedata = page.text.split("gameData =")[1].split("}}}</script>")[0]
 
 
 date = re.search(r'"print_date":"(\d{4}-\d{2}-\d{2})', gamedata).group(1)
-
-#re.search(r'"day_of_week":"Thursday":"(\d{4}-\d{2}-\d{2})', gamedata).group(1)
 puzzles = re.findall(r'"puzzle":\[([\d,]{161})', gamedata)
 
 easy = [int(i) for i in puzzles[0].split(",")]
@@ -24,7 +21,7 @@ hard = [int(i) for i in puzzles[1].split(",")]
 hard_puzzle = [hard[i : i + 9] for i in range(0, 81, 9)]
 
 all_puzzles = [easy_puzzle, medium_puzzle, hard_puzzle]
-colors = ['white', 'crimson','orange','gold','greenyellow','darkgreen','lightskyblue','mediumblue','mediumpurple','indigo']
+colors = ['white', 'crimson','orange','gold','limegreen','darkgreen','lightskyblue','mediumblue','mediumpurple','rebeccapurple']
 diff = ['easy', 'medium', 'hard']
 
 for i in range(3):
