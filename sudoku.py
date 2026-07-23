@@ -1,32 +1,27 @@
 import requests
-import re
+import json
 import matplotlib.pyplot as pyplot
 
 
 url = "https://www.nytimes.com/puzzles/sudoku/"
 page = requests.get(url)
+text = page.text
+search = "gameData = "
+start = text.find(search) + len(search)
+obj, end_idx = json.JSONDecoder().raw_decode(text, start)
 
-
-gamedata = page.text.split("gameData =")[1].split("}}}</script>")[0]
-
-
-date = re.search(r'"print_date":"(\d{4}-\d{2}-\d{2})', gamedata).group(1)
-puzzles = re.findall(r'"puzzle":\[([\d,]{161})', gamedata)
-
-easy = [int(i) for i in puzzles[0].split(",")]
-easy_puzzle = [easy[i : i + 9] for i in range(0, 81, 9)]
-medium = [int(i) for i in puzzles[2].split(",")]
-medium_puzzle = [medium[i : i + 9] for i in range(0, 81, 9)]
-hard = [int(i) for i in puzzles[1].split(",")]
-hard_puzzle = [hard[i : i + 9] for i in range(0, 81, 9)]
-
-all_puzzles = [easy_puzzle, medium_puzzle, hard_puzzle]
 colors = ['white', 'crimson','orange','gold','limegreen','darkgreen','lightskyblue','mediumblue','mediumpurple','rebeccapurple']
-diff = ['easy', 'medium', 'hard']
+levels = ['easy', 'medium', 'hard']
 
-for i in range(3):
-    puzzle = all_puzzles[i]
-    file_path = 'puzzles/' + date + ' ' + diff[i] + '.png'
+date = obj['easy']['print_date']
+puzzles = {}
+
+for diff in levels:
+    puzzles[diff] = [obj[diff]['puzzle_data']['puzzle'][i : i + 9] for i in range(0, 81, 9)]
+
+for diff in levels:
+    puzzle = puzzles[diff]
+    file_path = 'puzzles/' + date + ' ' + diff + '.png'
     fig, ax = pyplot.subplots(figsize=(11,11))
     ax.set_aspect("equal")
     ax.set_axis_off()
